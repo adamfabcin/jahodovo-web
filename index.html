@@ -51,6 +51,7 @@ a{color:inherit}
 .stage{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;background:var(--canvas)}
 .stage video{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:calc(var(--obj-x,50) * 1%) 50%;
   will-change:transform;transform:translateZ(0);
   opacity:0;transition:opacity .6s var(--ease-soft);
 }
@@ -142,7 +143,8 @@ a{color:inherit}
 .credit{position:fixed;left:50%;bottom:1.4vh;transform:translateX(-50%);z-index:50;
   font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.02em;
   color:rgba(245,239,228,.55);text-decoration:none;text-shadow:0 1px 3px rgba(5,5,10,.6);
-  transition:color .2s var(--ease-soft)}
+  opacity:0;pointer-events:none;transition:color .2s var(--ease-soft),opacity .4s var(--ease-soft)}
+.credit.in{opacity:1;pointer-events:auto}
 .credit:hover{color:var(--text-primary)}
 </style>
 </head>
@@ -216,6 +218,7 @@ a{color:inherit}
   var poster = document.getElementById('poster');
   var ring = document.querySelector('.ring');
   var chevron = document.getElementById('chevron');
+  var credit = document.querySelector('.credit');
   var bands = Array.prototype.slice.call(document.querySelectorAll('.band')).map(function(el, i, arr){
     return {
       el: el,
@@ -368,7 +371,31 @@ a{color:inherit}
   }
   function clamp(v, lo, hi){ return Math.min(hi, Math.max(lo, v)); }
 
+  /* Cover-crop on narrow screens only shows a slim center strip of this 16:9
+     footage. The subject drifts left (the ripening berry) then back right
+     (the hand and crate), so the crop follows it across the journey. */
+  var OBJX_KEYS = [
+    {p:0.00, x:50}, {p:0.40, x:50}, {p:0.50, x:22}, {p:0.70, x:25},
+    {p:0.74, x:42}, {p:0.86, x:55}, {p:1.00, x:44}
+  ];
+  var lastObjX = -1;
+  function objXAt(p){
+    for (var i = 1; i < OBJX_KEYS.length; i++){
+      var a = OBJX_KEYS[i-1], b = OBJX_KEYS[i];
+      if (p <= b.p){
+        var t = (p - a.p) / (b.p - a.p || 1);
+        return a.x + (b.x - a.x) * t;
+      }
+    }
+    return OBJX_KEYS[OBJX_KEYS.length - 1].x;
+  }
+
   function updateCaptions(p){
+    var objX = objXAt(p);
+    if (Math.abs(objX - lastObjX) > 0.3){
+      lastObjX = objX;
+      document.documentElement.style.setProperty('--obj-x', objX.toFixed(1));
+    }
     bands.forEach(function(b){
       var f = Math.min(0.02, (b.b - b.a) / 3);
       var opacity;
@@ -394,7 +421,8 @@ a{color:inherit}
         var settleK = smoothstep(p, b.a, b.b);
         if (Math.abs(settleK - lastSettleK) > 0.004){
           lastSettleK = settleK;
-          stage.style.setProperty('--settle-k', settleK.toFixed(3));
+          document.documentElement.style.setProperty('--settle-k', settleK.toFixed(3));
+          credit.classList.toggle('in', settleK > 0.05);
         }
       }
     });
