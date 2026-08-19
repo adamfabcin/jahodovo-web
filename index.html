@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jahodovo, s láskou k prírode</title>
+<meta name="description" content="Rodinná farma Jahodovo v Malante pri Nitre. Čerstvo natrhané jahody, pestované s láskou k prírode.">
+<meta name="theme-color" content="#171310">
+<meta property="og:title" content="Jahodovo, s láskou k prírode">
+<meta property="og:description" content="Rodinná farma v Malante pri Nitre. Čerstvo natrhané jahody, priamo z poľa.">
+<!-- DEPLOY STEP -->
+<meta property="og:image" content="assets/hero-poster.jpg">
+<meta property="og:url" content="">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%239c2b3c' d='M16 8c-6 0-10 5-10 12 0 5 4 9 10 9s10-4 10-9c0-7-4-12-10-12z'/%3E%3Cpath fill='%232f6b3a' d='M16 5l-3 4h6z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Karla:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#171310;
+  --panel:#221b16;
+  --accent:#9c2b3c;
+  --accent-hover:#b83a4d;
+  --accent-muted:rgba(156,43,60,.35);
+  --leaf:#3f7a4a;
+  --text-primary:#f5efe4;
+  --text-secondary:#cbbfae;
+  --tshadow:0 1px 2px rgba(5,5,10,.95),0 3px 12px rgba(5,5,10,.78),0 10px 44px rgba(5,5,10,.8);
+  --ease:cubic-bezier(.22,.7,.2,1);
+  --ease-soft:cubic-bezier(.4,.0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;overflow-x:clip}
+html{scrollbar-gutter:stable}
+body{
+  background:var(--canvas);
+  color:var(--text-primary);
+  font-family:'Karla',sans-serif;
+  font-size:16px;
+  line-height:1.5;
+}
+.skip-link{position:absolute;left:0;top:-48px;background:var(--accent);color:#fff;padding:.75em 1.2em;z-index:1000;transition:top .2s var(--ease-soft);text-decoration:none}
+.skip-link:focus{top:0}
+h1,h2,.display{font-family:'Fraunces',serif}
+.mono{font-family:'IBM Plex Mono',monospace;letter-spacing:.02em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;height:1100vh}
+.stage{position:sticky;top:0;height:100vh;width:100%;overflow:hidden;background:var(--canvas)}
+.stage video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  will-change:transform;transform:translateZ(0);
+  opacity:0;transition:opacity .6s var(--ease-soft);
+}
+.stage.video-ready video{opacity:1}
+.poster{position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity .6s var(--ease-soft)}
+.stage.video-ready .poster{opacity:0}
+.scrim{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 130% 95% at 50% 45%,rgba(10,8,7,0) 32%,rgba(10,8,7,.6) 100%);
+}
+
+.stage video,.stage .poster{filter:blur(calc(var(--settle-k,0) * 14px))}
+
+.brand-mark{position:absolute;left:50%;z-index:2;pointer-events:none;
+  top:calc(3vh + var(--settle-k,0) * 19vh);
+  width:calc(130px + var(--settle-k,0) * 150px);
+  transform:translate(-50%, calc(var(--settle-k,0) * -25%));
+  filter:drop-shadow(0 2px 14px rgba(0,0,0,.55));
+}
+
+.ring-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--text-primary);opacity:.85}
+.ring{width:48px;height:48px}
+.ring circle{transition:stroke-dashoffset .1s linear}
+.stage.video-ready .ring-wrap,.stage.video-failed .ring-wrap{display:none}
+
+.chevron{position:absolute;left:50%;bottom:6vh;transform:translateX(-50%);width:26px;height:26px;color:var(--text-primary);
+  opacity:calc(.8 * (1 - var(--settle-k,0)));animation:chevbob 2.2s ease-in-out infinite}
+@keyframes chevbob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+.band{position:absolute;inset:0;display:flex;align-items:center;pointer-events:none;opacity:0}
+.band::before{content:"";position:absolute;inset:-4%;pointer-events:none;
+  opacity:calc(.25 + .75*var(--k,1));
+  background:radial-gradient(ellipse 78% 64% at 38% 52%,rgba(5,4,4,.68) 0%,rgba(5,4,4,.46) 46%,rgba(5,4,4,0) 76%);
+}
+.band .inner{position:relative;z-index:1;max-width:min(90vw,34ch);padding:0 6vw}
+.band .kicker{display:block;font-family:'IBM Plex Mono',monospace;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:.9em;text-shadow:var(--tshadow)}
+.band h2{font-size:clamp(1.7rem,4.4vw,3.1rem);font-weight:600;margin:0;line-height:1.14;text-shadow:var(--tshadow)}
+.band p{font-size:clamp(1rem,2vw,1.25rem);color:var(--text-secondary);margin:.7em 0 0;max-width:32ch;text-shadow:var(--tshadow)}
+.band.settle{align-items:flex-end;justify-content:center;text-align:center;padding-bottom:9vh}
+.band.settle .inner{width:min(94vw,58ch);max-width:none;padding:0;text-align:center;
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+.band.settle .since{color:var(--text-primary);font-size:clamp(1.35rem,3.2vw,1.9rem);letter-spacing:.02em;margin:0 auto;max-width:26ch;text-shadow:var(--tshadow)}
+.band.settle .since .line2{display:block;margin-top:.35em}
+.band.settle .loc-row{margin-top:1.1em}
+.band.settle .social-row{display:flex;width:100%;gap:2.2em;row-gap:.7em;flex-wrap:wrap;justify-content:center;margin-top:1.1em}
+.band.settle .social-row a{display:inline-flex;align-items:center;gap:.5em;font-size:clamp(1.15rem,2.6vw,1.5rem);font-weight:500;color:var(--text-primary);text-decoration:none;white-space:nowrap;
+  text-shadow:var(--tshadow);transition:color .2s var(--ease-soft)}
+.band.settle .social-row a:hover{color:var(--accent-hover)}
+.band.settle .social-row svg{flex:none}
+
+.w{display:inline-block;white-space:pre;overflow:hidden}
+.c{display:inline-block;--kc:clamp(0,(var(--k,0) - var(--th,0))*2.6,1);opacity:var(--kc);
+   transform:translateY(calc((1 - var(--kc))*16px));transition:none}
+
+.chip{display:inline-flex;align-items:center;gap:.5em;background:rgba(10,8,7,.55);border:1px solid rgba(150,130,110,.3);
+  border-radius:999px;padding:.5em 1.1em;backdrop-filter:blur(10px);text-shadow:0 1px 3px rgba(5,5,10,.85);
+  font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--text-primary)}
+
+.cta-row{margin-top:1.4em;display:flex;gap:.8em;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;
+  background:var(--accent);color:#fff;border:none;border-radius:999px;padding:.85em 1.6em;
+  font-family:'Karla',sans-serif;font-weight:500;font-size:1rem;text-decoration:none;cursor:pointer;
+  transition:background .25s var(--ease-soft),transform .25s var(--ease-soft);text-shadow:none}
+.btn:hover{background:var(--accent-hover);transform:translateY(-2px)}
+@media (pointer:coarse){.btn{min-height:44px}}
+
+/* static hero (five gates) */
+.static-hero{display:none;position:absolute;inset:0;background-size:cover;background-position:center;
+  align-items:flex-end}
+.static-hero .inner{position:relative;z-index:1;padding:8vh 6vw 10vh;max-width:40ch}
+.static-hero::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(10,8,7,.86) 0%,rgba(10,8,7,.35) 55%,rgba(10,8,7,0) 100%)}
+.static-hero h1{font-size:clamp(2.2rem,9vw,3.2rem);margin:0 0 .3em;text-shadow:var(--tshadow);position:relative;z-index:1}
+.static-hero p{color:var(--text-secondary);margin:0 0 1.1em;text-shadow:var(--tshadow);position:relative;z-index:1}
+.static-hero .cta-row{position:relative;z-index:1}
+
+@media (max-width:720px),
+       (orientation:portrait) and (max-width:1024px),
+       (orientation:portrait) and (pointer:coarse),
+       (orientation:landscape) and (pointer:coarse) and (max-height:560px),
+       (prefers-reduced-motion:reduce){
+  .hero{height:100vh}
+  .stage{position:relative}
+  .stage video,.stage .poster,.stage .scrim,.stage .ring-wrap,.stage .chevron,.band{display:none}
+  .static-hero{display:flex}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .chevron{animation:none}
+  *{transition-duration:.001ms !important;animation-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Preskočiť na obsah</a>
+
+<main id="main" tabindex="-1">
+  <section class="hero" aria-label="Príbeh farmy Jahodovo">
+    <div class="stage" id="stage">
+      <div class="poster" id="poster" aria-hidden="true" style="background-image:url('assets/hero-poster.jpg')"></div>
+      <video id="hero-video" preload="none" muted playsinline aria-hidden="true" tabindex="-1"></video>
+      <div class="scrim" aria-hidden="true"></div>
+      <img class="brand-mark" src="assets/logo.png" alt="Jahodovo, s láskou k prírode">
+
+      <div class="ring-wrap" aria-hidden="true">
+        <svg class="ring" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3"
+                  stroke-dasharray="126" style="stroke-dashoffset:var(--ld,126)"/>
+        </svg>
+      </div>
+      <svg class="chevron" id="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 8l8 8 8-8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+      <div class="band settle" data-a="0.93" data-b="1.00">
+        <div class="inner">
+          <p class="since">Pestujeme jahody s láskou na Slovensku<span class="line2">od roku 2008.</span></p>
+          <div class="social-row">
+            <a href="tel:+421940640406">
+              <svg viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.2 6.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.2 1.2.4 2.5.6 3.8.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.7c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.2 1.1l-2.2 2.2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              0940 640 406
+            </a>
+            <a href="https://www.instagram.com/jahodovo_nitra_malanta/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></svg>
+              Instagram
+            </a>
+            <a href="https://www.facebook.com/jahodovo.sk/?locale=sk_SK" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 10.2h1.8V8.1h-1.8c-1.4 0-2.3.9-2.3 2.3v1.4H9.8v2.1h1.4V17h2.1v-3.1h1.7l.3-2.1h-2v-1c0-.4.2-.6.6-.6z" fill="currentColor"/></svg>
+              Facebook
+            </a>
+          </div>
+          <div class="social-row loc-row">
+            <a href="https://www.google.com/maps/search/?api=1&query=Malanta+1668+951+01+Nitrianske+Hrn%C4%8Diarovce" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="1.15em" height="1.15em" fill="none" aria-hidden="true"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>
+              Malanta 1668, Nitrianske Hrnčiarovce
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="static-hero" id="static-hero" style="background-image:url('assets/hero-poster.jpg')">
+        <div class="inner">
+          <h1>Jahodovo</h1>
+          <p>S láskou k prírode. Čerstvo natrhané jahody z rodinnej farmy pri Nitre, bez chemických postrekov.</p>
+          <div class="cta-row">
+            <a class="btn" href="tel:+421940640406">Zavolať: 0940 640 406</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  var stage = document.getElementById('stage');
+  var video = document.getElementById('hero-video');
+  var poster = document.getElementById('poster');
+  var ring = document.querySelector('.ring');
+  var chevron = document.getElementById('chevron');
+  var bands = Array.prototype.slice.call(document.querySelectorAll('.band')).map(function(el, i, arr){
+    return {
+      el: el,
+      a: parseFloat(el.dataset.a),
+      b: parseFloat(el.dataset.b),
+      isFirst: i === 0 && arr.length > 1,
+      isLast: i === arr.length - 1,
+      op: -1
+    };
+  });
+
+  var VIDEO_URL = 'assets/hero-scrub.mp4';
+  var VIDEO_BYTES = 17904568;
+
+  /* ---------------- seeded splitting (deterministic across loads) ---------------- */
+  function rng(seed){ var s = seed >>> 0; return function(){ s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+  (function splitBands(){
+    var seed = 1;
+    document.querySelectorAll('[data-split]').forEach(function(node){
+      var text = node.textContent;
+      var words = text.split(' ');
+      node.textContent = '';
+      var srOnly = document.createElement('span');
+      srOnly.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)';
+      srOnly.textContent = text;
+      node.appendChild(srOnly);
+      var visual = document.createElement('span');
+      visual.setAttribute('aria-hidden', 'true');
+      words.forEach(function(word, wi){
+        var wSpan = document.createElement('span');
+        wSpan.className = 'w';
+        var chars = word.split('');
+        chars.forEach(function(ch, ci){
+          var cSpan = document.createElement('span');
+          cSpan.className = 'c';
+          cSpan.textContent = ch;
+          var r = rng(seed++);
+          var th = Math.min(0.85, (wi * 3 + ci) / (words.join('').length + words.length) * 0.9 + r() * 0.04);
+          cSpan.style.setProperty('--th', th.toFixed(3));
+          wSpan.appendChild(cSpan);
+        });
+        visual.appendChild(wSpan);
+        if (wi < words.length - 1) visual.appendChild(document.createTextNode(' '));
+      });
+      node.appendChild(visual);
+    });
+  })();
+
+  /* ---------------- Blob streaming loader ---------------- */
+  var started = false;
+  function startBlobFetch(){
+    if (started) return;
+    started = true;
+    loadHeroBlob().catch(failVideo);
+  }
+  var posterImg = new Image();
+  posterImg.onload = startBlobFetch;
+  posterImg.onerror = startBlobFetch;
+  posterImg.src = 'assets/hero-poster.jpg';
+  setTimeout(startBlobFetch, 4000);
+
+  function loadHeroBlob(){
+    var ctrl = new AbortController();
+    var watchdog = setTimeout(function(){ ctrl.abort(); }, 20000);
+    return fetch(VIDEO_URL, { signal: ctrl.signal }).then(function(res){
+      var total = Number(res.headers.get('Content-Length')) || VIDEO_BYTES;
+      var reader = res.body.getReader();
+      var chunks = [];
+      var got = 0, lastRing = 0;
+      function pump(){
+        return reader.read().then(function(result){
+          if (result.done){
+            clearTimeout(watchdog);
+            ring.style.setProperty('--ld', 0);
+            var blob = new Blob(chunks);
+            video.src = URL.createObjectURL(blob);
+            video.load();
+            video.addEventListener('canplay', function once(){
+              video.removeEventListener('canplay', once);
+              requestSeek(heroProgress() * (video.duration || 1));
+              stage.classList.add('video-ready');
+            });
+            return;
+          }
+          clearTimeout(watchdog);
+          watchdog = setTimeout(function(){ ctrl.abort(); }, 20000);
+          chunks.push(result.value);
+          got += result.value.length;
+          var frac = Math.min(1, got / total);
+          var now = performance.now();
+          if (now - lastRing > 100 || frac === 1){
+            lastRing = now;
+            ring.style.setProperty('--ld', Math.round(126 * (1 - frac)));
+          }
+          return pump();
+        });
+      }
+      return pump();
+    });
+  }
+
+  function failVideo(){
+    chevron.style.display = '';
+    stage.classList.add('video-failed');
+  }
+
+  /* ---------------- scroll progress ---------------- */
+  function heroProgress(){
+    var rect = document.querySelector('.hero').getBoundingClientRect();
+    var total = rect.height - window.innerHeight;
+    if (total <= 0) return 0;
+    var p = (-rect.top) / total;
+    return Math.min(1, Math.max(0, p));
+  }
+
+  var heroOnScreen = false;
+  var io = new IntersectionObserver(function(entries){
+    heroOnScreen = entries[0].isIntersecting;
+    if (heroOnScreen && rafId === null) rafId = requestAnimationFrame(tick);
+  });
+  io.observe(document.querySelector('.hero'));
+
+  /* ---------------- gated seeks ---------------- */
+  var seekBusy = false;
+  var pendingTime = null;
+  function requestSeek(t){
+    if (!video.duration) return;
+    if (seekBusy){ pendingTime = t; return; }
+    seekBusy = true;
+    try { video.currentTime = t; } catch(e){ seekBusy = false; }
+  }
+  video.addEventListener('seeked', function(){
+    seekBusy = false;
+    if (pendingTime !== null){
+      var t = pendingTime; pendingTime = null;
+      requestSeek(t);
+    }
+  });
+  video.addEventListener('error', function(){
+    seekBusy = false; pendingTime = null;
+  });
+
+  /* ---------------- rAF lerp loop ---------------- */
+  var target = 0, shown = 0, rafId = null, lastTick = 0, lastSettleK = -1;
+  var loadStart = performance.now();
+
+  function smoothstep(p, e0, e1){
+    var t = Math.min(1, Math.max(0, (p - e0) / (e1 - e0)));
+    return t * t * (3 - 2 * t);
+  }
+  function clamp(v, lo, hi){ return Math.min(hi, Math.max(lo, v)); }
+
+  function updateCaptions(p){
+    bands.forEach(function(b){
+      var f = Math.min(0.02, (b.b - b.a) / 3);
+      var opacity;
+      if (b.isFirst){
+        opacity = 1 - smoothstep(p, b.b - f, b.b);
+      } else if (b.isLast){
+        opacity = smoothstep(p, b.a, b.a + f);
+      } else {
+        opacity = smoothstep(p, b.a, b.a + f) * (1 - smoothstep(p, b.b - f, b.b));
+      }
+      if (Math.abs(opacity - b.op) > 0.008){
+        b.op = opacity;
+        b.el.style.opacity = opacity.toFixed(3);
+      }
+      var ramp = Math.min(0.025, (b.b - b.a) * 0.35);
+      var k = clamp((p - b.a) / ramp, 0, 1);
+      if (b.isFirst){
+        var loadK = clamp((performance.now() - loadStart) / 1400, 0, 1);
+        k = Math.max(k, loadK);
+      }
+      b.el.style.setProperty('--k', k.toFixed(3));
+      if (b.el.classList.contains('settle')){
+        var settleK = smoothstep(p, b.a, b.b);
+        if (Math.abs(settleK - lastSettleK) > 0.004){
+          lastSettleK = settleK;
+          stage.style.setProperty('--settle-k', settleK.toFixed(3));
+        }
+      }
+    });
+  }
+
+  function tick(now){
+    var dt = Math.min(100, now - (lastTick || now));
+    lastTick = now;
+    var kSmooth = 0.16;
+    shown += (target - shown) * (1 - Math.pow(1 - kSmooth, dt / 16.667));
+    if (Math.abs(target - shown) < 0.0005){
+      shown = target;
+      rafId = null;
+      lastTick = 0;
+    } else if (heroOnScreen) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      rafId = null;
+    }
+    if (video.duration) requestSeek(shown * video.duration);
+    updateCaptions(shown);
+  }
+
+  function onScroll(){
+    target = heroProgress();
+    if (rafId === null && heroOnScreen) rafId = requestAnimationFrame(tick);
+  }
+
+  /* ---------------- static-hero gate (five conditions, CSS and JS identical) ---------------- */
+  var GATES = [
+    '(max-width: 720px)',
+    '(orientation: portrait) and (max-width: 1024px)',
+    '(orientation: portrait) and (pointer: coarse)',
+    '(orientation: landscape) and (pointer: coarse) and (max-height: 560px)',
+    '(prefers-reduced-motion: reduce)'
+  ];
+  var scrubOn = false;
+  function enableScrub(){
+    if (scrubOn) return; scrubOn = true;
+    addEventListener('scroll', onScroll, {passive:true});
+    bands.forEach(function(b){ b.op = -1; });
+    updateCaptions(heroProgress());
+    onScroll();
+  }
+  function disableScrub(){
+    if (!scrubOn) return; scrubOn = false;
+    removeEventListener('scroll', onScroll);
+    if (rafId !== null){ cancelAnimationFrame(rafId); rafId = null; }
+  }
+  function applyHeroMode(){
+    if (GATES.some(function(q){ return matchMedia(q).matches; })) disableScrub();
+    else enableScrub();
+  }
+  var MQLS = GATES.map(function(q){ return matchMedia(q); });
+  MQLS.forEach(function(m){ m.addEventListener('change', applyHeroMode); });
+  applyHeroMode();
+})();
+</script>
+</body>
+</html>
