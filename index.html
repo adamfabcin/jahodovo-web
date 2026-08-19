@@ -11,7 +11,7 @@
 <!-- DEPLOY STEP -->
 <meta property="og:image" content="assets/hero-poster.jpg">
 <meta property="og:url" content="">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%239c2b3c' d='M16 8c-6 0-10 5-10 12 0 5 4 9 10 9s10-4 10-9c0-7-4-12-10-12z'/%3E%3Cpath fill='%232f6b3a' d='M16 5l-3 4h6z'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Karla:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -89,6 +89,7 @@ a{color:inherit}
 .band h2{font-size:clamp(1.7rem,4.4vw,3.1rem);font-weight:600;margin:0;line-height:1.14;text-shadow:var(--tshadow)}
 .band p{font-size:clamp(1rem,2vw,1.25rem);color:var(--text-secondary);margin:.7em 0 0;max-width:32ch;text-shadow:var(--tshadow)}
 .band.settle{align-items:flex-end;justify-content:center;text-align:center;padding-bottom:9vh}
+.band.settle a{pointer-events:auto}
 .band.settle .inner{width:min(94vw,58ch);max-width:none;padding:0;text-align:center;
   font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
 .band.settle .since{color:var(--text-primary);font-size:clamp(1.35rem,3.2vw,1.9rem);letter-spacing:.02em;margin:0 auto;max-width:26ch;text-shadow:var(--tshadow)}
@@ -126,11 +127,7 @@ a{color:inherit}
 .static-hero p{color:var(--text-secondary);margin:0 0 1.1em;text-shadow:var(--tshadow);position:relative;z-index:1}
 .static-hero .cta-row{position:relative;z-index:1}
 
-@media (max-width:720px),
-       (orientation:portrait) and (max-width:1024px),
-       (orientation:portrait) and (pointer:coarse),
-       (orientation:landscape) and (pointer:coarse) and (max-height:560px),
-       (prefers-reduced-motion:reduce){
+@media (prefers-reduced-motion:reduce){
   .hero{height:100vh}
   .stage{position:relative}
   .stage video,.stage .poster,.stage .scrim,.stage .ring-wrap,.stage .chevron,.band{display:none}
@@ -141,6 +138,12 @@ a{color:inherit}
   .chevron{animation:none}
   *{transition-duration:.001ms !important;animation-duration:.001ms !important}
 }
+
+.credit{position:fixed;left:50%;bottom:1.4vh;transform:translateX(-50%);z-index:50;
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.02em;
+  color:rgba(245,239,228,.55);text-decoration:none;text-shadow:0 1px 3px rgba(5,5,10,.6);
+  transition:color .2s var(--ease-soft)}
+.credit:hover{color:var(--text-primary)}
 </style>
 </head>
 <body>
@@ -202,6 +205,8 @@ a{color:inherit}
     </div>
   </section>
 </main>
+
+<a class="credit" href="https://madebyfabrica.com" target="_blank" rel="noopener">madebyfabrica.com</a>
 
 <script>
 (function(){
@@ -418,12 +423,8 @@ a{color:inherit}
     if (rafId === null && heroOnScreen) rafId = requestAnimationFrame(tick);
   }
 
-  /* ---------------- static-hero gate (five conditions, CSS and JS identical) ---------------- */
+  /* ---------------- static-hero gate (reduced motion only; same scrub experience on every device) ---------------- */
   var GATES = [
-    '(max-width: 720px)',
-    '(orientation: portrait) and (max-width: 1024px)',
-    '(orientation: portrait) and (pointer: coarse)',
-    '(orientation: landscape) and (pointer: coarse) and (max-height: 560px)',
     '(prefers-reduced-motion: reduce)'
   ];
   var scrubOn = false;
